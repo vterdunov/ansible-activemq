@@ -1,18 +1,41 @@
-## Apache ActiveMQ
+activemq
+=========
+Эта роль устанавливает activemq.
 
-Эта роль устанавливает брокер сообщений Apache ActiveMQ.
+Requirements
+------------
+None
 
-#### Зависимости
-нет
-#### Платформы
+Role Variables
+--------------
 
-Разработано и протестировано на Ubuntu 14.04 (trusty)
-
-#### Установка роли для локального окружения
-
-
-Для установки activemq локально, запустите команду
-```sh
-ansible-playbook main.yml
 ```
-находясь в корне директории роли.
+amq_user: activemq
+amq_version: 5.8.0
+
+# ссылка для скачивания. Для версий старше 5.8.0 бинарные файлы находятся по адресу
+#  http://apache-mirror.rbc.ru/pub/apache/activemq/
+amq_download_url: http://archive.apache.org/dist/activemq/apache-activemq/{{ amq_version }}/apache-activemq-{{ amq_version }}-bin.tar.gz
+
+# директория для установки
+amq_install_dir: /opt
+
+# временная директория для загрузки файлов
+amq_download_dir: /tmp/amq_tmp
+```
+
+Dependencies
+------------
+None
+
+Example Playbook
+----------------
+```
+- hosts: all
+  roles:
+     - role: activemq
+```
+
+Author Information
+------------------
+Разработано и протестировано для Ubuntu 14.04 (trusty)
