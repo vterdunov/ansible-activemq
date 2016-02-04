@@ -12,27 +12,26 @@
         </property>
     </bean>
 
-    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="slave" dataDirectory="${activemq.data}">
+    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="master" dataDirectory="${activemq.data}">
         <destinationPolicy>
             <policyMap>
               <policyEntries>
-                <policyEntry topic=">" producerFlowControl="true">                   
+                <policyEntry topic=">" producerFlowControl="true">
                   <pendingMessageLimitStrategy>
                     <constantPendingMessageLimitStrategy limit="1000"/>
                   </pendingMessageLimitStrategy>
                 </policyEntry>
 
-                <!-- Необходим queuePrefetch="1" -->
-                <policyEntry queue=">" producerFlowControl="false" cursorMemoryHighWaterMark="30" queuePrefetch="1">
+                <policyEntry queue=">" producerFlowControl="false" cursorMemoryHighWaterMark="30">
                 </policyEntry>
 
-                <!-- Dead-сообщения отправляются в очередь с префиксом "dlq." -->
+                <!-- Dead-messages queue prefix -->
                 <policyEntry queue=">" producerFlowControl="false">
                   <deadLetterStrategy>
                     <individualDeadLetterStrategy queuePrefix="dlq." useQueueForQueueMessages="true" />
                   </deadLetterStrategy>
                 </policyEntry>
-              
+
               </policyEntries>
             </policyMap>
         </destinationPolicy>
@@ -60,9 +59,10 @@
         </systemUsage>
 
         <transportConnectors>
-            <transportConnector name="openwire" uri="tcp://0.0.0.0:61716?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600"/>
-            <transportConnector name="amqp" uri="amqp://0.0.0.0:5772?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600"/>
-            <transportConnector name="stomp+nio" uri="stomp+nio://0.0.0.0:61712?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+            <transportConnector name="openwire" uri="tcp://0.0.0.0:61616?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600"/>
+            <transportConnector name="amqp" uri="amqp://0.0.0.0:5672?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600"/>
+            <transportConnector name="stomp" uri="stomp://0.0.0.0:61612?transport.closeAsync=false"/>
+            <transportConnector name="stomp+nio" uri="stomp+nio://0.0.0.0:61613?transport.closeAsync=false"/>
         </transportConnectors>
 
         <shutdownHooks>

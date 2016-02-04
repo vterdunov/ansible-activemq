@@ -1,146 +1,75 @@
 ---
-- name: add group "activemq"
+- name: Add group 'activemq'
   group: name={{ amq_user }}
-  tags:
-    - install
 
-- name: add user "activemq"
+- name: Add user 'activemq'
   user:
-    name: "{{ amq_user }}"
-    group: "{{ amq_user }}"
+    name: '{{ amq_user }}'
+    group: '{{ amq_user }}'
     shell: /bin/sh
     createhome: no
-    comment: "activemq service user"
-  tags:
-    - install
+    comment: 'activemq service user'
 
-- name: "create install directory"
+- name: Create install directory
   file:
-    path: "{{ amq_install_dir }}/apache-activemq-{{ amq_version }}-{{ item }}"
+    path: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}'
     state: directory
-    owner: "{{ amq_user }}"
-    group: "{{ amq_user }}"
+    owner: '{{ amq_user }}'
+    group: '{{ amq_user }}'
     mode: 0775
-  with_items:
-    - master
-    - slave
-  tags:
-    - install
 
-- name: "prepare download directory"
+- name: Prepare download directory
   file:
-    path: "{{ amq_download_dir }}"
+    path: '{{ amq_download_dir }}'
     state: directory
-    owner: "{{ amq_user }}"
-    group: "{{ amq_user }}"
-  tags:
-    - install
+    owner: '{{ amq_user }}'
+    group: '{{ amq_user }}'
 
-- name: "download activemq"
-  get_url:
-    url: "{{ amq_download_url }}"
-    dest: "{{ amq_download_dir }}/mq.tar.gz"
-  tags:
-    - install
-
-- name: "unpack activemq"
+- name: Unarchive activemq
   unarchive:
-    src: '{{ amq_download_dir }}/mq.tar.gz'
+    src: '{{ amq_download_url }}'
     dest: '{{ amq_download_dir }}/'
     copy: no
     owner: '{{ amq_user }}'
     group: '{{ amq_user }}'
     creates: no
-  tags:
-    - install
 
-# TODO: не заменять логи (Так как они существуют в дистрибутиве)
-#  рассмотреть вариант с простой разархивацией
-- name: "synchronize activemq into master/slave directories"
-  synchronize:
-    src: '{{ amq_download_dir }}/apache-activemq-{{ amq_version }}/'
-    dest: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}-{{ item }}'
-    # archive: yes
-    # delete: no
-    # times: yes
-    # rsync_path: rsync
-    # dest_port: '{{ ansible_ssh_port }}'
-  with_items:
-    - master
-    - slave
-  delegate_to: '{{ ansible_eth0.ipv4.address }}'
-  tags: install
-
-- name: "copy activemq config file"
+- name: Copy activemq config file
   template:
-    src: activemq-5.8.0-{{ item }}.xml.j2
-    dest: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}-{{ item }}/conf/activemq.xml'
+    src: activemq.xml.j2
+    dest: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}/conf/activemq.xml'
     owner: '{{ amq_user }}'
     group: '{{ amq_user }}'
     mode: 0644
-  with_items:
-    - master
-    - slave
   tags:
      - config
 
-- name: "copy jetty config file"
-  template:
-    src: jetty-{{ item }}.xml.j2
-    dest: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}-{{ item }}/conf/jetty.xml'
-    owner: '{{ amq_user }}'
-    group: '{{ amq_user }}'
-    mode: 0644
-  with_items:
-    - master
-    - slave
-  tags:
-     - config
-
-- name: "set non-root user fot activemq"
+- name: Set non-root user for activemq
   lineinfile:
-    dest: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}-{{ item }}/bin/activemq'
+    dest: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}/bin/activemq'
     regexp: '^(.*)ACTIVEMQ_USER=""'
     line: '  ACTIVEMQ_USER={{ amq_user }}'
-  with_items:
-    - master
-    - slave
   tags:
      - config
 
-- name: "remove install files"
-  file: path={{ amq_download_dir }} state=absent
-  tags:
-    - install
-
-- name: "change owner on install directory"
+- name: Clean install files
   file:
-    path: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}-{{ item }}'
+    path: '{{ amq_download_dir }}'
+    state: absent
+
+- name: Change owner on install directory
+  file:
+    path: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}'
     state: directory
-    owner: "{{ amq_user }}"
-    group: "{{ amq_user }}"
+    owner: '{{ amq_user }}'
+    group: '{{ amq_user }}'
     recurse: yes
-  with_items:
-    - master
-    - slave
-  tags:
-    - install
 
-- name: "link init script"
+- name: Symlink init script
   file:
-    src: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}-{{ item }}/bin/activemq'
-    dest: '/etc/init.d/activemq-{{ item }}'
+    src: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}/bin/activemq'
+    dest: '/etc/init.d/activemq'
     state: link
-  with_items:
-    - master
-    - slave
-  tags:
-    - install
 
-- name: "update rc.d defaults"
-  shell: "update-rc.d activemq-{{ item }} defaults"
-  with_items:
-    - master
-    - slave
-  tags:
-    - install
+- name: Update rc.d defaults
+  shell: 'update-rc.d activemq defaults'
