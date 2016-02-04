@@ -18,17 +18,10 @@
     group: '{{ amq_user }}'
     mode: 0775
 
-- name: Prepare download directory
-  file:
-    path: '{{ amq_download_dir }}'
-    state: directory
-    owner: '{{ amq_user }}'
-    group: '{{ amq_user }}'
-
 - name: Unarchive activemq
   unarchive:
     src: '{{ amq_download_url }}'
-    dest: '{{ amq_download_dir }}/'
+    dest: '{{ amq_install_dir }}'
     copy: no
     owner: '{{ amq_user }}'
     group: '{{ amq_user }}'
@@ -51,11 +44,6 @@
     line: '  ACTIVEMQ_USER={{ amq_user }}'
   tags:
      - config
-
-- name: Clean install files
-  file:
-    path: '{{ amq_download_dir }}'
-    state: absent
 
 - name: Change owner on install directory
   file:

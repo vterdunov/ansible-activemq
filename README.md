@@ -19,9 +19,6 @@ amq_download_url: http://archive.apache.org/dist/activemq/apache-activemq/{{ amq
 
 # директория для установки
 amq_install_dir: /opt
-
-# временная директория для загрузки файлов
-amq_download_dir: /tmp/amq_tmp
 ```
 
 Dependencies
