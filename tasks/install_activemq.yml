@@ -1,8 +1,9 @@
 ---
-- name: Add group 'activemq'
-  group: name={{ amq_user }}
+- name: Add group for activemq
+  group:
+    name: '{{ amq_user }}'
 
-- name: Add user 'activemq'
+- name: Add user for activemq
   user:
     name: '{{ amq_user }}'
     group: '{{ amq_user }}'
@@ -12,7 +13,7 @@
 
 - name: Create install directory
   file:
-    path: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}'
+    path: '{{ amq_install_dir }}'
     state: directory
     owner: '{{ amq_user }}'
     group: '{{ amq_user }}'
@@ -30,7 +31,7 @@
 - name: Copy activemq config file
   template:
     src: activemq.xml.j2
-    dest: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}/conf/activemq.xml'
+    dest: '{{ amq_install_dir }}/conf/activemq.xml'
     owner: '{{ amq_user }}'
     group: '{{ amq_user }}'
     mode: 0644
@@ -39,7 +40,7 @@
 
 - name: Set non-root user for activemq
   lineinfile:
-    dest: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}/bin/activemq'
+    dest: '{{ amq_install_dir }}/bin/activemq'
     regexp: '^(.*)ACTIVEMQ_USER=""'
     line: '  ACTIVEMQ_USER={{ amq_user }}'
   tags:
@@ -47,7 +48,7 @@
 
 - name: Change owner on install directory
   file:
-    path: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}'
+    path: '{{ amq_install_dir }}'
     state: directory
     owner: '{{ amq_user }}'
     group: '{{ amq_user }}'
@@ -55,7 +56,7 @@
 
 - name: Symlink init script
   file:
-    src: '{{ amq_install_dir }}/apache-activemq-{{ amq_version }}/bin/activemq'
+    src: '{{ amq_install_dir }}/bin/activemq'
     dest: '/etc/init.d/activemq'
     state: link
 
