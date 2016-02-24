@@ -8,7 +8,7 @@
     name: '{{ amq_user }}'
     group: '{{ amq_user }}'
     shell: /bin/sh
-    createhome: no
+    createhome: yes
     comment: 'activemq service user'
 
 - name: Create install directory
@@ -19,14 +19,26 @@
     group: '{{ amq_user }}'
     mode: 0775
 
-- name: Unarchive activemq
-  unarchive:
-    src: '{{ amq_download_url }}'
-    dest: '{{ amq_install_dir }}'
-    copy: no
+- name: Create tmp directory
+  file:
+    path: '{{ amq_tmp_dir }}'
+    state: directory
     owner: '{{ amq_user }}'
     group: '{{ amq_user }}'
-    creates: no
+    mode: 0775
+
+- name: Download activemq
+  get_url:
+    url: '{{ amq_download_url }}'
+    dest: '{{ amq_tmp_dir }}/amq.tar.gz'
+    force: yes
+  retries: 5
+  delay: 10
+
+- name: Unarchive activemq
+  shell: 'tar -xf {{ amq_tmp_dir }}/amq.tar.gz -C {{ amq_install_dir }} --strip-components=1'
+  args:
+    chdir: '{{ amq_tmp_dir }}'
 
 - name: Copy activemq config file
   template:
@@ -53,6 +65,11 @@
     owner: '{{ amq_user }}'
     group: '{{ amq_user }}'
     recurse: yes
+
+- name: Clean install files
+  file:
+    path: '{{ amq_tmp_dir }}'
+    state: absent
 
 - name: Symlink init script
   file:
