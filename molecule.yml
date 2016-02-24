@@ -102,9 +102,9 @@ vagrant:
   providers:
     - name: virtualbox
       type: virtualbox
-#      options:
-#        memory: 512
-#        cpus: 2
+      options:
+        memory: 1024
+        cpus: 2
 
   instances:
     - name: ansible-activemq-01
