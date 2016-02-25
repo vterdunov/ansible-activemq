@@ -1,0 +1,32 @@
+---
+- name: Add group for activemq
+  group:
+    name: '{{ amq_user }}'
+
+- name: Add user for activemq
+  user:
+    name: '{{ amq_user }}'
+    group: '{{ amq_user }}'
+    shell: /bin/sh
+    createhome: yes
+    comment: 'activemq service user'
+
+- name: Create directories
+  file:
+    path: '{{ item.path }}'
+    state: directory
+    owner: '{{ amq_user }}'
+    group: '{{ amq_user }}'
+    mode: '{{ item.mode }}'
+  with_items:
+    - { path: '{{ amq_install_dir }}', mode: '0775' }
+    - { path: '{{ amq_tmp_dir }}', mode: '0775' }
+    - { path: '/var/log/activemq', mode: '0644' }
+
+- name: Download activemq
+  get_url:
+    url: '{{ amq_download_url }}'
+    dest: '{{ amq_tmp_dir }}/amq.tar.gz'
+    force: yes
+  retries: 5
+  delay: 10

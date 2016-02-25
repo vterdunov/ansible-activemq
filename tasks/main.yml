@@ -1,2 +1,8 @@
 ---
-- include: install_activemq.yml
+- include: prepare.yml
+
+- include: install.yml
+
+- include: config.yml
+
+- include: afterinstall.yml

@@ -12,7 +12,7 @@
         </property>
     </bean>
 
-    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="master" dataDirectory="${activemq.data}">
+    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="{{ amq_broker_name }}" dataDirectory="${activemq.data}">
         <destinationPolicy>
             <policyMap>
               <policyEntries>
@@ -61,8 +61,8 @@
         <transportConnectors>
             <transportConnector name="openwire" uri="tcp://0.0.0.0:61616?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600"/>
             <transportConnector name="amqp" uri="amqp://0.0.0.0:5672?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600"/>
-            <transportConnector name="stomp" uri="stomp://0.0.0.0:61612?transport.closeAsync=false"/>
-            <transportConnector name="stomp+nio" uri="stomp+nio://0.0.0.0:61613?transport.closeAsync=false"/>
+            <transportConnector name="stomp" uri="{{ amq_stomp_transport_connector_uri }}"/>
+            <transportConnector name="stomp+nio" uri="{{ amq_stomp_and_nio_transport_connector_uri }}"/>
         </transportConnectors>
 
         <shutdownHooks>
