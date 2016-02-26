@@ -1,8 +1,10 @@
 ---
 amq_user: activemq
 
-# Download link. For version higher 5.8.0 http://apache-mirror.rbc.ru/pub/apache/activemq/
-amq_download_url: 'http://archive.apache.org/dist/activemq/apache-activemq/5.8.0/apache-activemq-5.8.0-bin.tar.gz'
+# Download link (tar.gz)
+# Versions less than 5.10: http://archive.apache.org/dist/activemq/apache-activemq/
+# For versions higher 5.9.0: http://apache-mirror.rbc.ru/pub/apache/activemq/
+amq_download_url: 'http://apache-mirror.rbc.ru/pub/apache/activemq/5.13.1/apache-activemq-5.13.1-bin.tar.gz'
 
 # name of service for instances. also usage for service control, example:
 # 'service [amq_broker_name] start|stop|restart`
@@ -28,4 +30,4 @@ amq_custom_xml_config: False
 amq_custom_xml_config_path: ''
 
 # jetty settings
-amq_webconsole_port: 8162
+amq_webconsole_port: 8161

@@ -21,7 +21,7 @@
   with_items:
     - { path: '{{ amq_install_dir }}', mode: '0775' }
     - { path: '{{ amq_tmp_dir }}', mode: '0775' }
-    - { path: '/var/log/activemq', mode: '0774' }
+    - { path: '/var/log/activemq', mode: '0755' }
 
 - name: Download activemq
   get_url:
