@@ -1,6 +1,6 @@
 ---
 - name: Update rc.d defaults
-  shell: 'update-rc.d activemq defaults'
+  shell: 'update-rc.d {{ amq_broker_name }} defaults'
 
 - name: Clean install files
   file:
@@ -9,6 +9,6 @@
 
 - name: Ensure activemq service is running
   service:
-    name: activemq
+    name: '{{ amq_broker_name }}'
     state: started
     enabled: yes
