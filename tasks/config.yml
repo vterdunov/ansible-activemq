@@ -1,0 +1,53 @@
+---
+- name: Copy env configuration file
+  template:
+    src: activemq-env.j2
+    dest: /etc/default/activemq
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart activemq
+
+- name: Copy activemq.xml config file
+  template:
+    src: activemq.xml.j2
+    dest: '{{ amq_conf_dir }}/activemq.xml'
+    owner: '{{ amq_user }}'
+    group: '{{ amq_user }}'
+    mode: 0644
+  when:
+    - amq_custom_xml_config == False
+
+- name: Copy custom activemq.xml config file
+  template:
+    src: '{{ amq_custom_xml_config_path }}'
+    dest: '{{ amq_conf_dir }}/activemq.xml'
+    owner: '{{ amq_user }}'
+    group: '{{ amq_user }}'
+    mode: 0644
+  when:
+    - amq_custom_xml_config == True
+
+- name: Set webconsole port
+  replace:
+    dest: '{{ amq_conf_dir }}/jetty.xml'
+    regexp: '<property name="port" value="\d+"'
+    replace: '<property name="port" value="{{ amq_webconsole_port }}"'
+  notify:
+    - restart activemq
+
+- name: Change path to store log file
+  lineinfile:
+    dest: '{{ amq_conf_dir }}/log4j.properties'
+    regexp: '^log4j.appender.logfile.file='
+    line: 'log4j.appender.logfile.file=/var/log/activemq/activemq-{{ amq_broker_name }}.log'
+    state: present
+  notify:
+    - restart activemq
+
+- name: Symlink init script
+  file:
+    src: '{{ amq_install_dir }}/bin/activemq'
+    dest: '/etc/init.d/{{ amq_broker_name }}'
+    state: link

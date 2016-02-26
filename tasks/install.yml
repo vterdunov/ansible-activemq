@@ -1,0 +1,13 @@
+---
+- name: Unarchive activemq
+  shell: 'tar -xf {{ amq_tmp_dir }}/amq.tar.gz -C {{ amq_install_dir }} --strip-components=1'
+  args:
+    chdir: '{{ amq_tmp_dir }}'
+
+- name: Change owner on install directory
+  file:
+    path: '{{ amq_install_dir }}'
+    state: directory
+    owner: '{{ amq_user }}'
+    group: '{{ amq_user }}'
+    recurse: yes

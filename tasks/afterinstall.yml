@@ -1,0 +1,14 @@
+---
+- name: Update rc.d defaults
+  shell: 'update-rc.d {{ amq_broker_name }} defaults'
+
+- name: Clean install files
+  file:
+    path: '{{ amq_tmp_dir }}'
+    state: absent
+
+- name: Ensure activemq service is running
+  service:
+    name: '{{ amq_broker_name }}'
+    state: started
+    enabled: yes

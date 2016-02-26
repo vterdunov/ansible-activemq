@@ -1,3 +1,4 @@
 .bundle/
 .molecule/
 .vagrant/
+playbook.retry
