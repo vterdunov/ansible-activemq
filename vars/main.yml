@@ -1,2 +1,2 @@
 ---
-amq_tmp_dir: '/tmp/amq_tmp'
+amq_download_tmp_dir: '/tmp/amq_tmp'

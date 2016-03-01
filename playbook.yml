@@ -1,4 +1,32 @@
 ---
 - hosts: all
+  vars:
+    amq_download_url: 'http://archive.apache.org/dist/activemq/apache-activemq/5.8.0/apache-activemq-5.8.0-bin.tar.gz'
+    amq_user: activemq-instance-1
+    amq_broker_instance_name: instance-1
+    amq_install_dir: '/opt/activemq-instance-1'
+    amq_data_dir: '/var/lib/activemq/data/instance-1'
+    amq_openwire_transport_connector_uri: 'tcp://0.0.0.0:61616?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600'
+    amq_amqp_transport_connector_uri: 'amqp://0.0.0.0:5672?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600'
+    amq_stomp_transport_connector_uri: 'stomp://0.0.0.0:61713?transport.closeAsync=false'
+    amq_stomp_and_nio_transport_connector_uri: 'stomp+nio://0.0.0.0:61712?transport.closeAsync=false'
+    amq_webconsole_port: 8161
+
+  roles:
+    - role: ansible-activemq
+
+- hosts: all
+  vars:
+    amq_download_url: 'http://archive.apache.org/dist/activemq/apache-activemq/5.8.0/apache-activemq-5.8.0-bin.tar.gz'
+    amq_user: activemq-instance-2
+    amq_broker_instance_name: instance-2
+    amq_install_dir: '/opt/activemq-instance-2'
+    amq_data_dir: '/var/lib/activemq/data/instance-2'
+    amq_openwire_transport_connector_uri: 'tcp://0.0.0.0:61716?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600'
+    amq_amqp_transport_connector_uri: 'amqp://0.0.0.0:5772?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600'
+    amq_stomp_transport_connector_uri: 'stomp://0.0.0.0:61813?transport.closeAsync=false'
+    amq_stomp_and_nio_transport_connector_uri: 'stomp+nio://0.0.0.0:61812?transport.closeAsync=false'
+    amq_webconsole_port: 8162
+
   roles:
     - role: ansible-activemq

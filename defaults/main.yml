@@ -7,8 +7,8 @@ amq_user: activemq
 amq_download_url: 'http://apache-mirror.rbc.ru/pub/apache/activemq/5.13.1/apache-activemq-5.13.1-bin.tar.gz'
 
 # name of service for instances. also usage for service control, example:
-# 'service [amq_broker_name] start|stop|restart`
-amq_broker_name: activemq
+# 'service [amq_broker_instance_name] start|stop|restart|console`
+amq_broker_instance_name: activemq
 
 # installation directory
 amq_install_dir: '/opt/activemq'
@@ -16,7 +16,7 @@ amq_install_dir: '/opt/activemq'
 # activemq enviroment variables
 amq_opts_memory: '-Xms1G -Xmx1G'
 amq_conf_dir: '{{ amq_install_dir }}/conf'
-amq_data_dir: '{{ amq_install_dir }}/data'
+amq_data_dir: '/var/lib/activemq/data'
 amq_tmp_dir: '{{ amq_install_dir }}/tmp'
 
 # activemq broker config
