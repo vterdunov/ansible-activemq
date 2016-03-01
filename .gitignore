@@ -2,3 +2,4 @@
 .molecule/
 .vagrant/
 playbook.retry
+.cache/

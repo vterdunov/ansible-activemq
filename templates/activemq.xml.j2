@@ -12,7 +12,7 @@
         </property>
     </bean>
 
-    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="{{ amq_broker_name }}" dataDirectory="${activemq.data}">
+    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="{{ amq_broker_instance_name }}" dataDirectory="${activemq.data}">
         <destinationPolicy>
             <policyMap>
               <policyEntries>
