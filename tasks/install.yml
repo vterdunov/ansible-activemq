@@ -6,4 +6,5 @@
     owner: '{{ amq_user }}'
     group: '{{ amq_user }}'
     extra_opts: ['--strip-components=1']
-    remote_src: yes
+    copy: no
+    ignore_errors: yes
