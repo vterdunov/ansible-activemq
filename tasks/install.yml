@@ -7,4 +7,4 @@
     group: '{{ amq_user }}'
     extra_opts: ['--strip-components=1']
     copy: no
-    ignore_errors: yes
+  ignore_errors: yes
